@@ -1,6 +1,5 @@
 from twython import Twython
 import emoji
-from emoji import UNICODE_EMOJI
 
 t = Twython(
     '5wyHzyYilg93Lx0DGTJTMzloP',
@@ -15,7 +14,14 @@ def get_text(url):
     tweet = t.show_status(id=int(num),tweet_mode='extended')
     text = tweet['full_text']
 
-    emoji_count = sum([text.count(emoji) for emoji in UNICODE_EMOJI])
+    if hasattr(emoji, 'UNICODE_EMOJI'):
+        emoji_list = emoji.UNICODE_EMOJI
+    elif hasattr(emoji, 'EMOJI_DATA'):
+        emoji_list = emoji.EMOJI_DATA
+    else:
+        emoji_list = {}
+
+    emoji_count = sum([text.count(e) for e in emoji_list])
     
     if emoji_count == 0: # If there is no emoji
         return (text) # Return the text from status

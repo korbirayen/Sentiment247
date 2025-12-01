@@ -21,11 +21,17 @@ import pickle
 #=========================Main Window=============================
 class App:
     def __init__(self, master): 
+        colors = []
         try:       
             c.execute("SELECT * FROM Color")
             colors = c.fetchall()
         except sqlite3.OperationalError:
             messagebox.showerror("Database Error","Can't Access Database")
+            return
+
+        if not colors:
+             # Default colors if database is empty or query failed
+             colors = [('#ffffff', '#222222', '#e0e0e0')]
 
         for color in colors:
             primary = color[0] #'#ffffff' #181818
